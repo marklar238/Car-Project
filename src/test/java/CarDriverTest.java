@@ -1,4 +1,6 @@
+import cars.Car;
 import org.junit.jupiter.api.Test;
+import utilities.CarSet;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,24 +23,15 @@ class CarDriverTest {
             Car eighthCar = new Car("1988", "Volvo", "240D");
             Car ninthCar = new Car("1997", "Volvo", "960");
 
-            List<Car> carList = new ArrayList<>();
-            List<Car> clonedCarList;
-            carList.add(firstCar);
-            carList.add(secondCar);
-            carList.add(thirdCar);
-            carList.add(fourthCar);
-            carList.add(fifthCar);
-            carList.add(sixthCar);
-            carList.add(seventhCar);
-            carList.add(eighthCar);
-            carList.add(ninthCar);
+            System.out.println("step 1");
 
-            Car.serializeAsCsv(carList, "cars.txt");
+            CarSet carSet = new CarSet();
+            carSet.addCars(firstCar, secondCar, thirdCar, fourthCar, fifthCar, sixthCar, seventhCar, eighthCar, ninthCar);
 
-            clonedCarList = Car.deserializeFromCsv("cars.txt");
 
-            Set<Car> carSet = new HashSet<>(carList);
-            Set<Car> clonedCarSet = new HashSet<>(clonedCarList);
+            Car.serializeAsCsv(carSet, "cars.txt");
+
+            CarSet clonedCarSet = Car.deserializeFromCsv("cars.txt");
 
             assertEquals(carSet, clonedCarSet);
     }

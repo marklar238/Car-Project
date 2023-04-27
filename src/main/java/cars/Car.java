@@ -1,8 +1,5 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
+package cars;
+import utilities.CarSet;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -49,36 +46,17 @@ public class Car implements Comparable<Car> {
         this.year = year;
     }
 
-    public static void serializeAsCsv(List<Car> cars, String fileName) {
-        Path desktopPath = Paths.get(System.getProperty("user.home"), "Desktop");
-        Path filePath = desktopPath.resolve(fileName);
-        Set<Car> existingCars = new HashSet<>();
+    public static void serializeAsCsv(CarSet cars, String filePath) {
+        Path path = Paths.get(filePath);
         try {
-            List<String> lines = Files.readAllLines(filePath);
-            for (String line : lines) {
-                String[] carAttributes = line.split(",");
-                if (carAttributes.length != 3) {
-                    throw new IllegalArgumentException("Invalid data format");
-                } else {
-                    String year = carAttributes[0].trim();
-                    String make = carAttributes[1].trim();
-                    String model = carAttributes[2].trim();
-                    Car car = new Car(year, make, model);
-                    existingCars.add(car);
-                }
+            if (Files.exists(path)) {
+                Files.delete(path);
             }
-        } catch (IOException e) {
-            // ignore, file doesn't exist yet
-        }
+            Files.createFile(path);
 
-        try {
             for (Car car : cars) {
-                if (!existingCars.contains(car)) {
-                    String carAttributes = prePrintCsv(car);
-                    System.out.println(carAttributes);
-                    Files.write(filePath, (carAttributes + "\n").getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-                    existingCars.add(car);
-                }
+                String carAttributes = prePrintCsv(car);
+                Files.write(path, (carAttributes + "\n").getBytes(), StandardOpenOption.APPEND);
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -87,14 +65,13 @@ public class Car implements Comparable<Car> {
 
 
     public static String prePrintCsv(Car car) {
-        String var10000 = car.getYear();
-        return var10000 + "," + car.getMake() + "," + car.getModel();
+        return car.getYear() + "," + car.getMake() + "," + car.getModel();
     }
 
-    public static List<Car> deserializeFromCsv(String fileName) {
+    public static CarSet deserializeFromCsv(String fileName) {
         Path desktopPath = Paths.get(System.getProperty("user.home"), "Desktop");
         Path filePath = desktopPath.resolve(fileName);
-        List<Car> carList = new ArrayList<>();
+        CarSet carSet = new CarSet();
 
         try {
             List<String> lines = Files.readAllLines(filePath);
@@ -106,13 +83,14 @@ public class Car implements Comparable<Car> {
                 String year = carAttributes[0].trim();
                 String make = carAttributes[1].trim();
                 String model = carAttributes[2].trim();
-                carList.add(new Car(year, make, model));
+                carSet.add(new Car(year, make, model));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return carList;
+        return carSet;
     }
+
 
     public boolean equals(Object o) {
         if (this == o) {

@@ -1,3 +1,7 @@
+package cars;
+
+import utilities.CarSet;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -17,33 +21,21 @@ public class CarDriver {
 
         System.out.println("step 1");
 
-        List<Car> carList = new ArrayList<>();
-        List<Car> clonedCarList;
-        carList.add(secondCar);
-        carList.add(firstCar);
-        carList.add(thirdCar);
-        carList.add(fourthCar);
-        carList.add(fifthCar);
-        carList.add(sixthCar);
-        carList.add(seventhCar);
-        carList.add(eighthCar);
-        carList.add(ninthCar);
+        CarSet carSet = new CarSet();
+        carSet.addCars(firstCar, secondCar, thirdCar, fourthCar, fifthCar, sixthCar, seventhCar, eighthCar, ninthCar);
 
         System.out.println("step 2");
 
+        String filePath = System.getProperty("user.home") + "/Desktop/cars.txt";
 
-        Car.serializeAsCsv(carList, "cars.txt");
+        Car.serializeAsCsv(carSet, filePath);
 
         System.out.println("step 3");
 
-        clonedCarList = Car.deserializeFromCsv("cars.txt");
+        CarSet clonedCarSet = Car.deserializeFromCsv("cars.txt");
 
         System.out.println("step 4");
 
-        Set<Car> carSet = new HashSet<>(carList);
-        Set<Car> clonedCarSet = new HashSet<>(clonedCarList);
-
-        System.out.println("step 5");
 
         if (carSet.equals(clonedCarSet)) {
             System.out.println("carList and clonedCarList are equal");
